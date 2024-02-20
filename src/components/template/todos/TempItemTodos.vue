@@ -30,7 +30,12 @@ const emits = defineEmits<{
       />
     </div>
     <div class="flex items-center gap-3">
-      <AppButton variant="secondary" size="sm" @click="emits('onUpdate', todo.id)">
+      <AppButton
+        variant="secondary"
+        size="sm"
+        :disabled="todo.isCompleted"
+        @click="emits('onUpdate', todo.id)"
+      >
         <VIcon name="bi-pencil-fill" />
       </AppButton>
       <AppButton variant="secondary" size="sm" @click="emits('onRemove', todo.id)">
