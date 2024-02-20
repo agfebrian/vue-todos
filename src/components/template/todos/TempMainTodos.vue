@@ -40,6 +40,14 @@ watch(activeTab, (newVal) => {
   searchTodo.value = ''
 })
 
+watch(
+  todos,
+  () => {
+    refreshShowTodos()
+  },
+  { deep: true }
+)
+
 const textTodo = ref<string>('')
 const searchTodo = ref<string>('')
 const isUpdateTodo = ref<boolean>(false)
@@ -68,16 +76,12 @@ const addTodo = () => {
     todo: textTodo.value,
     isCompleted: false
   })
-  // refresh todos filtered
-  refreshShowTodos()
 }
 
 const updateTodo = () => {
   const index = todos.value.findIndex((item) => item.id === selectedTodo.value.id)
   if (index != -1) {
     todos.value[index] = { ...selectedTodo.value, todo: textTodo.value }
-    // refresh todos filtered
-    showTodos.value = todosUncompleted.value
   }
 }
 
@@ -100,8 +104,6 @@ const resetEditTodo = () => {
 
 const removeTodo = (id: number | string) => {
   todos.value = todos.value.filter((item) => item.id !== id)
-  // refresh todos filtered
-  refreshShowTodos()
   searchTodo.value = ''
 }
 
