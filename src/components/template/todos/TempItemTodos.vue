@@ -23,7 +23,11 @@ const emits = defineEmits<{
   >
     <div class="flex items-center gap-3">
       <AppCheckbox v-model="model" :id="String(todo.id)" />
-      <AppLabel :for-label="String(todo.id) as string" :text="todo.todo" />
+      <AppLabel
+        :for-label="String(todo.id) as string"
+        :text="todo.todo"
+        :add-class="todo.isCompleted ? 'line-through' : ''"
+      />
     </div>
     <div class="flex items-center gap-3">
       <AppButton variant="secondary" size="sm" @click="emits('onUpdate', todo.id)">
