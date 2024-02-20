@@ -18,9 +18,11 @@ const emits = defineEmits<{
 const input = ref<InstanceType<typeof AppInput> | null>()
 
 const handleClick = () => {
-  emits('onClick')
-  model.value = ''
-  input.value?.focusInput()
+  if (!disabledButton.value) {
+    emits('onClick')
+    model.value = ''
+    input.value?.focusInput()
+  }
 }
 
 const disabledButton = computed(() => (model.value as string).length < 5)
@@ -28,7 +30,7 @@ const disabledButton = computed(() => (model.value as string).length < 5)
 
 <template>
   <AppCard add-class="flex-row">
-    <AppInput v-model="model" placeholder="Type your todo" />
+    <AppInput v-model="model" placeholder="Type your todo" @keyup.enter="handleClick" />
     <AppButton :disabled="disabledButton" @click="handleClick">
       {{ isUpdateTodo ? 'Update' : 'Save' }}
     </AppButton>
