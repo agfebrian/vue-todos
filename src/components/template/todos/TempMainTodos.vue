@@ -131,7 +131,7 @@ const refreshShowTodos = () => {
 
       <!-- todos -->
       <div class="rounded-app w-full overflow-hidden bg-blue-100">
-        <div class="flex flex-col justify-center">
+        <div v-if="showTodos.length" class="flex flex-col justify-center">
           <TempItemTodos
             v-for="todo in showTodos"
             :key="todo.id"
@@ -140,6 +140,9 @@ const refreshShowTodos = () => {
             @on-update="editTodo"
             @on-remove="removeTodo"
           />
+        </div>
+        <div v-else class="flex min-h-16 items-center justify-center">
+          <h2 class="text-xl font-semibold text-gray-400">There no todos here</h2>
         </div>
       </div>
     </AppCard>
