@@ -59,8 +59,7 @@ const addTodo = () => {
   if (isUpdateTodo.value) {
     updateTodo()
     // reset data that need to updated todo
-    isUpdateTodo.value = false
-    selectedTodo.value = {} as Todo
+    resetEditTodo()
     return
   }
 
@@ -89,6 +88,16 @@ const editTodo = (id: number | string) => {
   textTodo.value = todo!.todo
 }
 
+const cancelEditTodo = () => {
+  resetEditTodo()
+  textTodo.value = ''
+}
+
+const resetEditTodo = () => {
+  isUpdateTodo.value = false
+  selectedTodo.value = {} as Todo
+}
+
 const removeTodo = (id: number | string) => {
   todos.value = todos.value.filter((item) => item.id !== id)
   // refresh todos filtered
@@ -110,7 +119,12 @@ const refreshShowTodos = () => {
 <template>
   <main class="flex flex-col gap-4">
     <TempSearchTodos v-model="searchTodo" :show="toggleSearch" />
-    <HeaderTodos v-model="textTodo" :is-update-todo="isUpdateTodo" @on-click="addTodo" />
+    <HeaderTodos
+      v-model="textTodo"
+      :is-update-todo="isUpdateTodo"
+      @on-click="addTodo"
+      @on-close="cancelEditTodo"
+    />
     <AppCard>
       <!-- tab -->
       <AppTab v-model="activeTab" :items="itemsTab" />

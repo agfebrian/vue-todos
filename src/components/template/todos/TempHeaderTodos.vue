@@ -13,6 +13,7 @@ const model = defineModel()
 defineProps<Props>()
 const emits = defineEmits<{
   (e: 'onClick'): void
+  (e: 'onClose'): void
 }>()
 
 const input = ref<InstanceType<typeof AppInput> | null>()
@@ -30,7 +31,13 @@ const disabledButton = computed(() => (model.value as string).length < 5)
 
 <template>
   <AppCard add-class="flex-row">
-    <AppInput v-model="model" placeholder="Type your todo" @keyup.enter="handleClick" />
+    <AppInput
+      v-model="model"
+      placeholder="Type your todo"
+      :icon="isUpdateTodo"
+      @keyup.enter="handleClick"
+      @on-close="emits('onClose')"
+    />
     <AppButton :disabled="disabledButton" @click="handleClick">
       {{ isUpdateTodo ? 'Update' : 'Save' }}
     </AppButton>
