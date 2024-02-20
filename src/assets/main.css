@@ -1,0 +1,9 @@
+@import './base.css';
+
+body {
+  @apply bg-blue-300/30
+}
+
+.rounded-app {
+  @apply rounded-lg
+}
