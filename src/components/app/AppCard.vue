@@ -9,7 +9,14 @@ defineProps<Props>()
 </script>
 
 <template>
-  <div :class="twMerge('rounded-app flex flex-col items-center gap-3 bg-white p-4', addClass)">
+  <div
+    :class="
+      twMerge(
+        'rounded-app flex flex-col items-center gap-3 bg-white p-4 transition-all duration-300',
+        addClass
+      )
+    "
+  >
     <slot />
   </div>
 </template>

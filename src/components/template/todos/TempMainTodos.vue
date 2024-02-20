@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, inject } from 'vue'
 
 import AppCard from '@/components/app/AppCard.vue'
 import HeaderTodos from './TempHeaderTodos.vue'
 import AppTab from '@/components/app/AppTab.vue'
 import TempItemTodos from '@/components/template/todos/TempItemTodos.vue'
+import TempSearchTodos from '@/components/template/todos/TempSearchTodos.vue'
 
 import type { Todo } from '@/types'
+
+const { toggleSearch } = inject('toggleSearch') as any
 
 const itemsTab = ['All', 'On Progress', 'Done']
 const activeTab = ref<number>(0)
@@ -34,11 +37,23 @@ watch(activeTab, (newVal) => {
   } else {
     showTodos.value = todos.value
   }
+  searchTodo.value = ''
 })
 
 const textTodo = ref<string>('')
+const searchTodo = ref<string>('')
 const isUpdateTodo = ref<boolean>(false)
 const selectedTodo = ref<Todo>({} as Todo)
+
+watch(searchTodo, (newVal) => {
+  if (newVal) {
+    showTodos.value = showTodos.value.filter((item) =>
+      item.todo.toLocaleLowerCase().includes(newVal.toLocaleLowerCase())
+    )
+  } else {
+    refreshShowTodos()
+  }
+})
 
 const addTodo = () => {
   if (isUpdateTodo.value) {
@@ -54,6 +69,8 @@ const addTodo = () => {
     todo: textTodo.value,
     isCompleted: false
   })
+  // refresh todos filtered
+  refreshShowTodos()
 }
 
 const updateTodo = () => {
@@ -75,16 +92,24 @@ const editTodo = (id: number | string) => {
 const removeTodo = (id: number | string) => {
   todos.value = todos.value.filter((item) => item.id !== id)
   // refresh todos filtered
+  refreshShowTodos()
+  searchTodo.value = ''
+}
+
+const refreshShowTodos = () => {
   if (activeTab.value === 1) {
     showTodos.value = todosUncompleted.value
   } else if (activeTab.value === 2) {
     showTodos.value = todosCompleted.value
+  } else {
+    showTodos.value = todos.value
   }
 }
 </script>
 
 <template>
   <main class="flex flex-col gap-4">
+    <TempSearchTodos v-model="searchTodo" :show="toggleSearch" />
     <HeaderTodos v-model="textTodo" :is-update-todo="isUpdateTodo" @on-click="addTodo" />
     <AppCard>
       <!-- tab -->
