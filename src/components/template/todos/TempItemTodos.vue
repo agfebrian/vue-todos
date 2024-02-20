@@ -11,6 +11,10 @@ interface Props {
 
 const model = defineModel()
 defineProps<Props>()
+const emits = defineEmits<{
+  (e: 'onUpdate', id: number | string): void
+  (e: 'onRemove', id: number | string): void
+}>()
 </script>
 
 <template>
@@ -22,10 +26,10 @@ defineProps<Props>()
       <AppLabel :for-label="String(todo.id) as string" :text="todo.todo" />
     </div>
     <div class="flex items-center gap-3">
-      <AppButton variant="secondary" size="sm">
+      <AppButton variant="secondary" size="sm" @click="emits('onUpdate', todo.id)">
         <VIcon name="bi-pencil-fill" />
       </AppButton>
-      <AppButton variant="secondary" size="sm">
+      <AppButton variant="secondary" size="sm" @click="emits('onRemove', todo.id)">
         <VIcon name="bi-trash-fill" fill="#fd2020" />
       </AppButton>
     </div>

@@ -21,11 +21,49 @@ const todos = ref<Todo[]>([
     isCompleted: false
   }
 ])
+
+const textTodo = ref<string>('')
+const isUpdateTodo = ref<boolean>(false)
+const selectedTodo = ref<Todo>({} as Todo)
+
+const addTodo = () => {
+  if (isUpdateTodo.value) {
+    updateTodo()
+    // reset data that need to updated todo
+    isUpdateTodo.value = false
+    selectedTodo.value = {} as Todo
+    return
+  }
+
+  todos.value.push({
+    id: Number(Math.random()),
+    todo: textTodo.value,
+    isCompleted: false
+  })
+}
+
+const updateTodo = () => {
+  const index = todos.value.findIndex((item) => item.id === selectedTodo.value.id)
+  if (index != -1) {
+    todos.value[index] = { ...selectedTodo.value, todo: textTodo.value }
+  }
+}
+
+const editTodo = (id: number | string) => {
+  const todo = todos.value.find((item) => item.id === id)
+  isUpdateTodo.value = true
+  selectedTodo.value = todo!
+  textTodo.value = todo!.todo
+}
+
+const removeTodo = (id: number | string) => {
+  todos.value = todos.value.filter((item) => item.id !== id)
+}
 </script>
 
 <template>
   <main class="flex flex-col gap-4">
-    <HeaderTodos />
+    <HeaderTodos v-model="textTodo" :is-update-todo="isUpdateTodo" @on-click="addTodo" />
     <AppCard>
       <!-- tab -->
       <AppTab v-model="activeTab" :items="['On Progress', 'Done']" />
@@ -38,6 +76,8 @@ const todos = ref<Todo[]>([
             :key="todo.id"
             v-model="todo.isCompleted"
             :todo="todo"
+            @on-update="editTodo"
+            @on-remove="removeTodo"
           />
         </div>
       </div>

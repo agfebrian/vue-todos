@@ -5,6 +5,7 @@ import { twMerge } from 'tailwind-merge'
 interface Props {
   variant?: 'primary' | 'secondary'
   size?: 'sm' | 'md' | 'lg'
+  disabled?: boolean
   addClass?: string
 }
 
@@ -23,6 +24,13 @@ const colorize = computed(() => {
       result = 'bg-blue-100 text-blue-500 hover:bg-blue-200 active:bg-blue-300'
       break
   }
+
+  // check if disabled is true
+  if (props.disabled) {
+    const splitted = result.split(' ')
+    result = splitted.slice(0, 2).join(' ')
+  }
+
   return result
 })
 
@@ -41,12 +49,21 @@ const sizing = computed(() => {
   }
   return result
 })
+
+const inactive = computed(() => (props.disabled ? 'opacity-50' : ''))
 </script>
 
 <template>
   <button
+    :disabled="disabled"
     :class="
-      twMerge('rounded-app font-semibold shadow transition-colors', sizing, colorize, addClass)
+      twMerge(
+        'rounded-app font-semibold shadow transition-colors',
+        sizing,
+        colorize,
+        addClass,
+        inactive
+      )
     "
   >
     <slot>Button</slot>
