@@ -9,7 +9,9 @@ import TempSearchTodos from '@/components/template/todos/TempSearchTodos.vue'
 
 import type { Todo } from '@/types'
 
-const { toggleSearch } = inject('toggleSearch') as any
+const { toggleSearch } = inject('toggleSearch', {
+  toggleSearch: false
+})
 
 const itemsTab = ['All', 'On Progress', 'Done']
 const activeTab = ref<number>(0)
@@ -133,7 +135,7 @@ const refreshShowTodos = () => {
 
       <!-- todos -->
       <div class="rounded-app w-full overflow-hidden bg-blue-100">
-        <div v-if="showTodos.length" class="flex flex-col justify-center">
+        <div v-if="showTodos.length" data-todos class="flex flex-col justify-center">
           <TempItemTodos
             v-for="todo in showTodos"
             :key="todo.id"
