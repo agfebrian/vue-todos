@@ -96,6 +96,8 @@ const resetEditTodo = () => {
 const removeTodo = (id: number | string) => {
   todos.value = todos.value.filter((item) => item.id !== id)
   searchTodo.value = ''
+  textTodo.value = ''
+  isUpdateTodo.value = false
 }
 
 const refreshShowTodos = () => {
