@@ -15,18 +15,7 @@ const { toggleSearch } = inject('toggleSearch', {
 
 const itemsTab = ['All', 'On Progress', 'Done']
 const activeTab = ref<number>(0)
-const todos = ref<Todo[]>([
-  {
-    id: 1,
-    todo: 'Todo 1',
-    isCompleted: false
-  },
-  {
-    id: 2,
-    todo: 'Todo 2',
-    isCompleted: false
-  }
-])
+const todos = ref<Todo[]>([])
 const showTodos = ref<Todo[]>([...todos.value])
 const todosCompleted = computed(() => todos.value.filter((item) => item.isCompleted))
 const todosUncompleted = computed(() => todos.value.filter((item) => !item.isCompleted))
